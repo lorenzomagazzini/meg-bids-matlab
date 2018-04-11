@@ -1,5 +1,5 @@
 function [ bidsnifti, bidsnifti_name, bidsnifti_dir ] = rename_nii2bids( nifti, bids )
-%function [ bidsnifti, bidsnifti_name, bidsnifti_dir ] = rename_nii2bids( nifti, bids )
+%[ bidsnifti, bidsnifti_name, bidsnifti_dir ] = rename_nii2bids( nifti, bids )
 % 
 % This function takes the full path to a NIfTI MRI file as input ("nifti") 
 % and returns the corresponding full path to a BIDS-formatted NIfTI ("bidsnifti").
