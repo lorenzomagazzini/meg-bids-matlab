@@ -28,7 +28,7 @@ bids.task_label = 'nback';
 %full path to NIfTI file
 orignifti_dir = fullfile(basepath, '/exampledata/raw/example001');
 orignifti_name = 'example001.nii';
-orignifti = fullfile(orignifti_dir, orignifti_name);
+orignifti = fullfile(orignifti_dir, orignifti_name)
 
 %define BIDS structure fields (see "help rename_nii2bids")
 bids = struct;
@@ -37,8 +37,8 @@ bids.participant_label = '001';
 bids.modality_label = 'T1w';
 
 %generate string, full path to NIfTI file in BIDS format
-[bidsnifti] = rename_nii2bids(orignifti, bids);
+[bidsnifti] = rename_nii2bids(orignifti, bids)
 
 %copy original NIfTI, convert to BIDS format (file name, file path)
-[bidsnifti_dir, bidsnifti_name, bidsnifti_ext] = write_nii2bids(orignifti, bidsnifti);
+[bidsnifti_dir, bidsnifti_name, bidsnifti_ext] = write_nii2bids(orignifti, bidsnifti)
 
