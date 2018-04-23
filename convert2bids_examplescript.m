@@ -1,4 +1,9 @@
 
+% Example script to convert MEG datasets and NIfTI MRI anatomicals to BIDS
+% format (i.e. BIDS file naming convention and directory tree structure).
+
+% Written by Lorenzo Magazzini, 23 Apr 2018 (magazzinil@gmail.com)
+
 
 %% 1. convert a raw MEG dataset to BIDS format
 
