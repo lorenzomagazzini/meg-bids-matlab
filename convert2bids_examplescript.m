@@ -3,7 +3,7 @@
 %% 1. convert a raw MEG dataset to BIDS format
 
 %specify your own path to "exampledata" directory here
-basepath = '/cubric/collab/meg-partnership/cardiff/';
+basepath = '/';
 
 %full path to raw MEG dataset
 rawdataset_dir = fullfile(basepath, '/exampledata/raw/example001');
