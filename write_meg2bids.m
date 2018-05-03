@@ -11,6 +11,7 @@ function [ bidsdataset_dir, bidsdataset_name, bidsdataset_ext ] = write_meg2bids
 %   "cp -r" for directories with no extensions (4d/BTi)
 
 % Written by Lorenzo Magazzini, Jan 2018 (magazzinil@gmail.com)
+% Updated May 2018
 
 
 %check raw MEG dataset
@@ -28,12 +29,12 @@ else
 end
 
 %create directory for BIDS MEG dataset, if it doesn't exist
-if exist(bidsdataset_dir,'dir')==7
+if exist(bidsdataset_dir,'dir')==7 %exist('A') returns: 7 if A is a directory
     fprintf('the BIDS ''meg'' directory already exists\n')
 else
     fprintf('the BIDS ''meg'' directory is being created\n')
-    s = mkdir(bidsdataset_dir);
-    if s~=1, error; end
+    success = mkdir(bidsdataset_dir);
+    if success~=1, error('the BIDS ''meg'' directory was not created'); end %mkdir returns 1 if operation has succeeded
 end
 
 %print the name of the BIDS MEG dataset
@@ -46,16 +47,17 @@ fprintf('the BIDS MEG dataset will be renamed %s\n', [bidsdataset_name bidsdatas
 switch rawdataset_ext
     case '.ds'
         fprintf('copying using the CTF command "copyDs" ...\n')
-        s = unix(sprintf('copyDs %s %s', rawdataset, bidsdataset));
-        if s~=0, error('error using copyDs'); end
+        status = unix(sprintf('copyDs %s %s', rawdataset, bidsdataset));
+        if status~=0, error('error using copyDs'); end %unix returns 0 if operation has succeeded
     case '.fif'
         fprintf('copying using the Linux command "cp" ...\n')
-        s = unix(sprintf('cp %s %s', rawdataset, bidsdataset));
-        if s~=0, error('error using cp'); end
+        status = unix(sprintf('cp %s %s', rawdataset, bidsdataset));
+        if status~=0, error('error using cp'); end
     case ''
         fprintf('copying using the Linux command "cp -r" ...\n')
-        s = unix(sprintf('cp -r %s %s', rawdataset, bidsdataset));
-        if s~=0, error('error using cp -r'); end
+        status = unix(sprintf('cp -r %s %s', rawdataset, bidsdataset));
+        if status~=0, error('error using cp -r'); end
     otherwise
         error(sprintf('this function does not yet support MEG datasets with extension %s', rawdataset_ext))
 end %switch
+
