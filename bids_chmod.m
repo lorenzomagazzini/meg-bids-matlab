@@ -31,21 +31,21 @@ function [  ] = bids_chmod( bids_path, permissions, recursive, extension )
 %%
 
 %definitions
-if isfield(permissions,'bids'),     bids_p = permissions.bids; end
-if isfield(recursive,'bids'),       bids_r = recursive.bids; else  	bids_r = false; end %default
-if isfield(permissions,'sub'),      sub_p = permissions.sub; end
-if isfield(recursive,'sub'),        sub_r = recursive.sub; else     sub_r = false; end %default
-if isfield(permissions,'ses'),      ses_p = permissions.ses; error('setting permissions at the session level is not yet implemented'); end
-if isfield(recursive,'ses'),        ses_r = recursive.ses; else     ses_r = false; end %default
-if isfield(permissions,'anat'),     anat_p = permissions.anat; end
-if isfield(recursive,'anat'),       anat_r = recursive.anat; else   anat_r = false; end %default
-if isfield(permissions,'nii'),     	nii_p = permissions.nii; end
+if isfield(permissions,'bids'),     bids_p = permissions.bids; else     bids_p = '750'; end %default
+if isfield(recursive,'bids'),       bids_r = recursive.bids; else       bids_r = false; end %default
+if isfield(permissions,'sub'),      sub_p = permissions.sub; else       sub_p = '750'; end %default
+if isfield(recursive,'sub'),        sub_r = recursive.sub; else         sub_r = false; end %default
+if isfield(permissions,'ses'),      error('setting permissions at the session level is not yet implemented'); end
+if isfield(recursive,'ses'),        ses_r = recursive.ses; else         ses_r = false; end %default
+if isfield(permissions,'anat'),     anat_p = permissions.anat; else     anat_p = '750'; end %default
+if isfield(recursive,'anat'),       anat_r = recursive.anat; else       anat_r = false; end %default
+if isfield(permissions,'nii'),     	nii_p = permissions.nii; else       nii_p = '550'; end %default
 % if isfield(recursive,'nii'),        nii_r = recursive.nii; end %no recursive option for nifti files
-if isfield(permissions,'meg'),      meg_p = permissions.meg; end
-if isfield(recursive,'meg'),        meg_r = recursive.meg; else     meg_r = false; end %default
-if isfield(permissions,'ds'),       ds_p = permissions.ds; end
-if isfield(recursive,'ds'),         ds_r = recursive.ds; else       ds_r = false; end %default
-if isfield(extension,'ds'),         ds_e = extension.ds; end %MEG dataset extension
+if isfield(permissions,'meg'),      meg_p = permissions.meg; else       meg_p = '750'; end %default
+if isfield(recursive,'meg'),        meg_r = recursive.meg; else         meg_r = false; end %default
+if isfield(permissions,'ds'),       ds_p = permissions.ds; else         ds_p = '550'; end %default
+if isfield(recursive,'ds'),         ds_r = recursive.ds; else           ds_r = false; end %default
+if isfield(extension,'ds'),         ds_e = extension.ds; else           error('please specify the MEG dataset file extension'); end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
