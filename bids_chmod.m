@@ -24,28 +24,29 @@ function [  ] = bids_chmod( bids_path, permissions, recursive, extension )
 %     extension = struct;
 %     extension.ds = '.ds';
 
-% Written by Lorenzo Magazzini (magazzinil@gmail.com)
+% Written xxx 2018 by Lorenzo Magazzini (magazzinil@gmail.com)
 % Updated May 2018
+% Updated Oct 2018
 
 
 %%
 
 %definitions
-if isfield(permissions,'bids'),     bids_p = permissions.bids; else     bids_p = '750'; end %default
-if isfield(recursive,'bids'),       bids_r = recursive.bids; else       bids_r = false; end %default
-if isfield(permissions,'sub'),      sub_p = permissions.sub; else       sub_p = '750'; end %default
-if isfield(recursive,'sub'),        sub_r = recursive.sub; else         sub_r = false; end %default
+if isfield(permissions,'bids'),     bids_p = permissions.bids;      else  	bids_p = '750'; end %default
+if isfield(recursive,'bids'),       bids_r = recursive.bids;        else  	bids_r = false; end %default
+if isfield(permissions,'sub'),      sub_p = permissions.sub;        else  	sub_p = '750'; end %default
+if isfield(recursive,'sub'),        sub_r = recursive.sub;          else  	sub_r = false; end %default
 if isfield(permissions,'ses'),      error('setting permissions at the session level is not yet implemented'); end
-if isfield(recursive,'ses'),        ses_r = recursive.ses; else         ses_r = false; end %default
-if isfield(permissions,'anat'),     anat_p = permissions.anat; else     anat_p = '750'; end %default
-if isfield(recursive,'anat'),       anat_r = recursive.anat; else       anat_r = false; end %default
-if isfield(permissions,'nii'),     	nii_p = permissions.nii; else       nii_p = '550'; end %default
+if isfield(recursive,'ses'),        ses_r = recursive.ses;          else  	ses_r = false; end %default
+if isfield(permissions,'anat'),     anat_p = permissions.anat;      else  	anat_p = '750'; end %default
+if isfield(recursive,'anat'),       anat_r = recursive.anat;        else  	anat_r = false; end %default
+if isfield(permissions,'nii'),     	nii_p = permissions.nii;        else  	nii_p = '550'; end %default
 % if isfield(recursive,'nii'),        nii_r = recursive.nii; end %no recursive option for nifti files
-if isfield(permissions,'meg'),      meg_p = permissions.meg; else       meg_p = '750'; end %default
-if isfield(recursive,'meg'),        meg_r = recursive.meg; else         meg_r = false; end %default
-if isfield(permissions,'ds'),       ds_p = permissions.ds; else         ds_p = '550'; end %default
-if isfield(recursive,'ds'),         ds_r = recursive.ds; else           ds_r = false; end %default
-if isfield(extension,'ds'),         ds_e = extension.ds; else           error('please specify the MEG dataset file extension'); end
+if isfield(permissions,'meg'),      meg_p = permissions.meg;        else  	meg_p = '750'; end %default
+if isfield(recursive,'meg'),        meg_r = recursive.meg;          else  	meg_r = false; end %default
+if isfield(permissions,'ds'),       ds_p = permissions.ds;          else  	ds_p = '550'; end %default
+if isfield(recursive,'ds'),         ds_r = recursive.ds;            else   	ds_r = false; end %default
+if isfield(extension,'ds'),         ds_e = extension.ds;            else  	error('please specify the MEG dataset file extension'); end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,7 +70,7 @@ if s~=0, error(sprintf('error setting permissions in %s', D)); end
 fprintf('changed permissions to %s%s in %s\n', P, S, D)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
 %get subject directories
 dir_struct = dir(fullfile(bids_path, 'sub*'));
 dir_struct(~[dir_struct.isdir]) = []; %remove non-directories
@@ -252,7 +253,38 @@ for isubj = 1:nsubj
                 
             end
             clear dir_struct
-        
+            
+        case '' %4D/BTi has directories with no extension... just *_meg
+            
+            %get tasks for each participant
+            dir_struct = dir(fullfile(meg_dir, ['*_meg' ds_e]));
+            ntask = length(dir_struct);
+            
+            %set recursive option
+            if ds_r == true
+                R = ' -R';
+                S = ' recursively';
+            else
+                R = ''; %recursive flag
+                S = ''; %recursive string
+            end
+            
+            %loop over individual datasets
+            for itask = 1:ntask
+                
+                %define dataset name
+                ds_dir = fullfile(meg_dir, dir_struct(itask).name);
+                D = ds_dir; %directory
+                P = ds_p; %permissions
+                
+                %change permissions at the dataset .ds directory level
+                s = unix(['chmod' R ' ' P ' ' D]);
+                if s~=0, error(sprintf('error setting permissions in %s', D)); end
+                fprintf('changed permissions to %s%s in %s\n', P, S, D)
+                
+            end
+            clear dir_struct
+            
         otherwise
         
             error(sprintf('MEG extension ''%s'' not yet implemented. Allowed extensions are ''%s'' and ''%s''', ds_e, '.ds', '.fif'))
